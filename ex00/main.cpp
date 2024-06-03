@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:36:16 by okraus            #+#    #+#             */
-/*   Updated: 2024/06/02 16:30:41 by okraus           ###   ########.fr       */
+/*   Updated: 2024/06/03 11:20:04 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,15 @@ int main(int argc, char *argv[])
 	if (argc != 2)
 	{
 		std::cerr << ERROR_COLOUR << "Incorrect number of arguments!" << NO_COLOUR << std::endl;
+		return (1);
 	}
 	try
 	{
-		BitcoinExchange(argv[1]);
+		BitcoinExchange bitex(argv[1]);
 	}
-	catch
+	catch (const std::exception &e)
 	{
-		//more stuff
+		std::cerr << e.what() << std::endl;
 	}
 	return (0);
 }
