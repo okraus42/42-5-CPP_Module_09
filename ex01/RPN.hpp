@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/06/04 17:46:09 by okraus           ###   ########.fr       */
+/*   Updated: 2024/06/08 16:56:50 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,43 @@ class RPN
 		int				_lnum;
 		int				_rnum;
 		long			_test;
-		std::stack<int>	numbers;
+		std::string		_token;
+		std::stack<int>	_numbers;
+
+		class DivisionByZeroException : public std::exception
+		{
+			public:
+				const char*		what() const throw();
+		};
+
+		class NumberTooBigException : public std::exception
+		{
+			public:
+				const char*		what() const throw();
+		};
+
+		class ResultTooBigException : public std::exception
+		{
+			public:
+				const char*		what() const throw();
+		};
+
+		class UnsupportedTokenException : public std::exception
+		{
+			public:
+				const char*		what() const throw();
+		};
+
+		class IncorrectSyntaxException : public std::exception
+		{
+			public:
+				const char*		what() const throw();
+		};
+		//error division by zero
+	//error unsupported token
+	//error number too big
+	//error result too big
+	//error incorrect syntax
 
 };
 
