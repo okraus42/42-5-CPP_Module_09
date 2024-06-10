@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/06/09 17:32:55 by okraus           ###   ########.fr       */
+/*   Updated: 2024/06/10 13:28:24 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <ctime>
 # include <cstring>
 # include <map>
+# include <algorithm>
 
 class BitcoinExchange
 {
