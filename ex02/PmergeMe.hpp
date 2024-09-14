@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/09/14 11:25:29 by okraus           ###   ########.fr       */
+/*   Updated: 2024/09/14 14:09:34 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 //# include <cstddef>
 # include <iostream>
+# include <iomanip>
 # include <fstream>
 # include <sstream>
 # include <ctime>
@@ -47,8 +48,13 @@ template <typename T> std::string	ok_itostr(T num)
 template <typename T> void	ok_iterPrint(const T &container, const std::string string)
 {
 	std::cout << string << ": ";
-	for (typename T::const_iterator it = container.begin(); it != container.end(); ++it)
-		std::cout << *it << ", ";
+	for (typename T::const_iterator it = container.begin(); it != container.end();)
+	{
+		std::cout << *it;
+		++it;
+		if (it != container.end())
+			std::cout << ", ";
+	}
 	std::cout << std::endl;
 }
 
@@ -66,14 +72,6 @@ class PmergeMe
 		std::list<unsigned int>		lst;
 		std::vector<unsigned int>	vecSorted;
 		std::list<unsigned int>		lstSorted;
-		unsigned long				vec_stime_start;
-		unsigned long				vec_utime_start;
-		unsigned long				lst_stime_start;
-		unsigned long				lst_utime_start;
-		unsigned long				vec_stime_end;
-		unsigned long				vec_utime_end;
-		unsigned long				lst_stime_end;
-		unsigned long				lst_utime_end;
 };
 
 #endif

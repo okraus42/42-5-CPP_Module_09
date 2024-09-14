@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/09/14 11:35:25 by okraus           ###   ########.fr       */
+/*   Updated: 2024/09/14 14:13:45 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,10 @@ PmergeMe::PmergeMe(char *argv[])
 	std::cout << "Overloaded array constructor of the PmergeMe class called.";
 	ft_uncolorize();
 	std::cout << std::endl;
+	std::clock_t		startVec;
+	double				durationVec;
+	std::clock_t		startLst;
+	double				durationLst;
 	unsigned long		num;
 
 	//check for duplicates and invalid numbers
@@ -142,22 +146,38 @@ PmergeMe::PmergeMe(char *argv[])
 	{
 		if (!ok_numcheck(argv[i]))
 			throw(std::runtime_error(std::string("Invalid number: ") + argv[i]));
-		std::cout << argv[i] << std::endl;
+		//std::cout << argv[i] << std::endl;
 		//check for duplicates and invalid numbers
 		num = ok_strtoi<unsigned long>(argv[i]);
 		if (num > 4294967295UL)
-		// 	throw(std::runtime_error(std::string("Number too big: ") + argv[i]));
-		// if (this->vec.find(num) != this->vec.end())
-		// 	throw(std::runtime_error(std::string("Number is duplicate: ") + argv[i]));
+			throw(std::runtime_error(std::string("Number too big: ") + argv[i]));
+		for (std::vector<unsigned int>::iterator it = this->vec.begin(); it != this->vec.end(); ++it)
+			if (num == *it)
+				throw(std::runtime_error(std::string("Number is duplicate: ") + argv[i]));
 		//add items to containers
 		this->lst.push_back((unsigned int)num);
 		this->vec.insert(this->vec.end(), (unsigned int)num);
 	}
-	std::cout << this->lst.size() << std::endl;
 	ok_iterPrint(this->lst, "Original list  ");
 	ok_iterPrint(this->vec, "Original vector");
+	startLst = std::clock();
+	//sort list
+	durationLst = (double)( std::clock() - startLst ) * 1000000. / (double) CLOCKS_PER_SEC;
+	startVec = std::clock();
+	//sort vec
+	durationVec = (double)( std::clock() - startVec ) * 1000000. / (double) CLOCKS_PER_SEC;
+
+	ok_iterPrint(this->lstSorted, "Sorted list  ");
+	ok_iterPrint(this->vecSorted, "Sorted vector");
 	//get time in seconds and microseconds
 	//time sort in each container
 	//print containers
+	std::cout << "Time to process a range of " << this->lst.size()
+	<< " elements with std::list : " << std::fixed << std::setprecision (5) << durationLst
+	<< " μs" << std::endl;
+	
+	std::cout << "Time to process a range of " << this->vec.size()
+	<< " elements with std::list : " << std::fixed << std::setprecision (5) << durationVec
+	<< " μs" << std::endl;
 }
 
