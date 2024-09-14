@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/06/10 13:54:39 by okraus           ###   ########.fr       */
+/*   Updated: 2024/06/10 15:05:00 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ BitcoinExchange::BitcoinExchange(std::string filename)
 	std::string	value_string;
 	float		value;
 	// Opening the csv
-	std::string	databasename = "minidata.csv";
+	std::string	databasename = "data.csv";
 	std::ifstream	database (databasename.c_str());
 	std::string	line;
 	std::cout << YELLOW_COLOUR << " Opening the database <" << databasename << "> " << NO_COLOUR << std::endl;
@@ -206,7 +206,7 @@ BitcoinExchange::BitcoinExchange(std::string filename)
 			// std::cout << parsedTime << std::endl;
 			//get day from line
 			day = parsedTime / seconds_in_day;
-			std::cerr << BLUE_COLOUR << " Day " << day << " " << NO_COLOUR << std::endl;
+			// std::cerr << BLUE_COLOUR << " Day " << day << " " << NO_COLOUR << std::endl;
 			if (day < first_time)
 			{
 				std::cerr << RED_COLOUR << " Error: Date too early => " << ERROR_COLOUR << date << " " << NO_COLOUR << std::endl;
@@ -235,9 +235,9 @@ BitcoinExchange::BitcoinExchange(std::string filename)
 			std::cout << GREEN_COLOUR << " " << date << " => " << value_string
 			<< " = " << value * (*(--history.upper_bound(day))).second << " "
 			<< NO_COLOUR << std::endl;
-			std::cout << YELLOW_COLOUR << " day " << day
-			<< " = " << (*(--history.upper_bound(day))).first << " "
-			<< NO_COLOUR << std::endl;
+			// std::cout << YELLOW_COLOUR << " day " << day
+			// << " = " << (*(--history.upper_bound(day))).first << " "
+			// << NO_COLOUR << std::endl;
 		}
 		file_stream.close();
 	}
