@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/09/14 14:13:45 by okraus           ###   ########.fr       */
+/*   Updated: 2024/09/16 14:40:33 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,123 @@ static bool	ok_numcheck(char *s)
 	return (true);
 }
 
+static std::list<std::pair<unsigned int, unsigned int> > ok_mergeList(std::list<std::pair<unsigned int, unsigned int> > lstL, std::list<std::pair<unsigned int, unsigned int> > lstR)
+{
+	lstL.merge(lstR);
+	ok_iterPrint(lstL, "Merged list   ");
+	return (lstL);
+}
+
+static std::list<std::pair<unsigned int, unsigned int> >	ok_mergeSortList(std::list<std::pair<unsigned int, unsigned int> > &lst)
+{
+	unsigned int mid = lst.size();
+	if (mid < 2)
+		return (lst);
+
+	mid /= 2;
+	std::list<std::pair<unsigned int, unsigned int> >::iterator middle = lst.begin();
+	std::advance(middle, mid);
+	std::list<std::pair<unsigned int, unsigned int> > lstLeft(lst.begin(), middle);
+	std::list<std::pair<unsigned int, unsigned int> > lstRight(middle, lst.end());
+	ok_iterPrint(lstLeft, "Left list     ");
+	ok_iterPrint(lstRight, "Right list    ");
+	// leftP = recursiveMergeList(leftP);
+	// rightP = recursiveMergeList(rightP);
+	return (ok_mergeList(ok_mergeSortList(lstLeft), ok_mergeSortList(lstRight)));
+}
+
+// static void ok_mergeVector(std::vector<std::pair<unsigned int, unsigned int>> &lst, unsigned int left, unsigned int mid, unsigned int right)
+// {
+// 	unsigned int n1 = mid - left + 1;
+// 	unsigned int n2 = right - mid;
+
+// 	// Create temp vectors
+// 	std::vector<unsigned int> L(n1), R(n2);
+
+// 	// Copy data to temp vectors L[] and R[]
+// 	for (unsigned int i = 0; i < n1; i++)
+// 		L[i] = lst[left + i];
+// 	for (unsigned int j = 0; j < n2; j++)
+// 		R[j] = lst[mid + 1 + j];
+
+// 	unsigned int i = 0, j = 0;
+// 	unsigned int k = left;
+
+// 	// Merge the temp vectors back 
+// 	// into lst[left..right]
+// 	while (i < n1 && j < n2) {
+// 		if (L[i] <= R[j]) {
+// 			lst[k] = L[i];
+// 			i++;
+// 		}
+// 		else {
+// 			lst[k] = R[j];
+// 			j++;
+// 		}
+// 		k++;
+// 	}
+
+// 	// Copy the remaining elements of L[], 
+// 	// if there are any
+// 	while (i < n1) {
+// 		lst[k] = L[i];
+// 		i++;
+// 		k++;
+// 	}
+
+// 	// Copy the remaining elements of R[], 
+// 	// if there are any
+// 	while (j < n2) {
+// 		lst[k] = R[j];
+// 		j++;
+// 		k++;
+// 	}
+// }
+
+// static void	ok_mergeSortVector(std::vector<std::pair<unsigned int, unsigned int>> &lst, unsigned int left, unsigned int right)
+// {
+// 	if (left >= right)
+// 		return;
+
+// 	unsigned int mid = left + (right - left) / 2;
+// 	ok_mergeSortVector(lst, left, mid);
+// 	ok_mergeSortVector(lst, mid + 1, right);
+// 	ok_mergeVector(lst, left, mid, right);
+// }
+
+static std::list<unsigned int>	ok_sortList(std::list<unsigned int> oldList)
+{
+	
+	//make pairs
+	//compare pairs
+	// sort larger values into a sequence
+	// insert at the start element from the smallest pair
+	// insert the rest my magic (Ford Johnson stuff)
+
+	//main chain
+	//pend chain
+	unsigned int	size = oldList.size();
+	bool			odd = false;
+	(void) odd;
+	if (size / 2)
+		odd = true;
+	std::list<std::pair<unsigned int, unsigned int> > pairList;
+	std::list<unsigned int>::iterator it = oldList.begin();
+	for (unsigned int i = 0; i < size / 2; i++)
+	{
+		unsigned int a = *it++;
+		unsigned int b = *it++;
+		std::pair<unsigned int, unsigned int> pair;
+		(a > b) ? pair = std::make_pair(a, b) : pair = std::make_pair(b, a);
+		pairList.push_back(pair);
+	}
+	pairList = ok_mergeSortList(pairList);
+	std::list<unsigned int> mainChain;
+	ok_iterPrint(pairList, "Pair list     ");
+	return(mainChain);
+}
+
+
 PmergeMe::PmergeMe(char *argv[])
 {
 	ft_colorize(reinterpret_cast<uintptr_t>(this));
@@ -162,11 +279,13 @@ PmergeMe::PmergeMe(char *argv[])
 	ok_iterPrint(this->vec, "Original vector");
 	startLst = std::clock();
 	//sort list
+	this->lstSorted = ok_sortList(this->lst);
 	durationLst = (double)( std::clock() - startLst ) * 1000000. / (double) CLOCKS_PER_SEC;
 	startVec = std::clock();
 	//sort vec
 	durationVec = (double)( std::clock() - startVec ) * 1000000. / (double) CLOCKS_PER_SEC;
 
+	std::cout << CLOCKS_PER_SEC << std::endl;
 	ok_iterPrint(this->lstSorted, "Sorted list  ");
 	ok_iterPrint(this->vecSorted, "Sorted vector");
 	//get time in seconds and microseconds
@@ -181,3 +300,8 @@ PmergeMe::PmergeMe(char *argv[])
 	<< " μs" << std::endl;
 }
 
+std::ostream& operator<<(std::ostream& os, const std::pair<unsigned int, unsigned int> &pair)
+{
+	os << "[" << pair.first << ":" << pair.second << "]";
+	return os;
+}
