@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/09/16 14:40:33 by okraus           ###   ########.fr       */
+/*   Updated: 2024/09/17 14:04:11 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,12 @@ static bool	ok_numcheck(char *s)
 	return (true);
 }
 
-static std::list<std::pair<unsigned int, unsigned int> > ok_mergeList(std::list<std::pair<unsigned int, unsigned int> > lstL, std::list<std::pair<unsigned int, unsigned int> > lstR)
-{
-	lstL.merge(lstR);
-	ok_iterPrint(lstL, "Merged list   ");
-	return (lstL);
-}
+// static std::list<std::pair<unsigned int, unsigned int> > ok_mergeList(std::list<std::pair<unsigned int, unsigned int> > lstL, std::list<std::pair<unsigned int, unsigned int> > lstR)
+// {
+// 	lstL.merge(lstR);
+// 	ok_iterPrint(lstL, "Merged list   ");
+// 	return (lstL);
+// }
 
 static std::list<std::pair<unsigned int, unsigned int> >	ok_mergeSortList(std::list<std::pair<unsigned int, unsigned int> > &lst)
 {
@@ -148,9 +148,11 @@ static std::list<std::pair<unsigned int, unsigned int> >	ok_mergeSortList(std::l
 	std::list<std::pair<unsigned int, unsigned int> > lstRight(middle, lst.end());
 	ok_iterPrint(lstLeft, "Left list     ");
 	ok_iterPrint(lstRight, "Right list    ");
-	// leftP = recursiveMergeList(leftP);
-	// rightP = recursiveMergeList(rightP);
-	return (ok_mergeList(ok_mergeSortList(lstLeft), ok_mergeSortList(lstRight)));
+	lstLeft = ok_mergeSortList(lstLeft);
+	lstRight = ok_mergeSortList(lstRight);
+	lstLeft.merge(lstRight);
+	ok_iterPrint(lstLeft, "Merged list   ");
+	return (lstLeft);
 }
 
 // static void ok_mergeVector(std::vector<std::pair<unsigned int, unsigned int>> &lst, unsigned int left, unsigned int mid, unsigned int right)
