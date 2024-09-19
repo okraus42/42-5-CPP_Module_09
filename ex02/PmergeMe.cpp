@@ -6,12 +6,18 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/09/17 15:05:30 by okraus           ###   ########.fr       */
+/*   Updated: 2024/09/19 18:56:23 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 #include "colours.hpp"
+
+
+//jacobsthal numbers
+// 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461, 10923, 21845, 43691, 87381, 174763, 349525, 699051, 1398101, 2796203, 5592405, 11184811, 22369621, 44739243, 89478485, 178956971, 357913941, 715827883, 1431655765, 2863311531, 5726623061, 11453246123
+
+
 
 PmergeMe::PmergeMe(void)
 {
@@ -228,7 +234,7 @@ static void ok_mergeVector(std::vector<std::pair<unsigned int, unsigned int> >& 
 
 void	ok_mergeSort(std::vector<std::pair<unsigned int, unsigned int> > &vec, unsigned int left, unsigned int right)
 {
-	if (left >= right)
+	if (left >= right || right == (unsigned int)-1)
 		return;
 
 	unsigned int mid = left + (right - left) / 2;
@@ -250,6 +256,7 @@ static std::list<unsigned int>	ok_sort(std::list<unsigned int> oldList)
 	//pend chain
 	unsigned int	size = oldList.size();
 	bool			odd = false;
+	unsigned int	leftover;
 	(void) odd;
 	if (size / 2)
 		odd = true;
@@ -263,10 +270,60 @@ static std::list<unsigned int>	ok_sort(std::list<unsigned int> oldList)
 		(a > b) ? pair = std::make_pair(a, b) : pair = std::make_pair(b, a);
 		pairList.push_back(pair);
 	}
+	if (odd)
+		leftover = *it;
+	(void)leftover;
 	pairList = ok_mergeSort(pairList);
 	std::list<unsigned int> mainChain;
 	ok_iterPrint(pairList, "Pair list     ");
+
 	return(mainChain);
+}
+//3 7 15
+//2 2 6 10 22 42
+									//    4(1), 6(3) 12(9) 22(19)
+// const static unsigned long long	g_j[34] = {3ULL, 5ULL, 11ULL, 21ULL, 43ULL, 85ULL, 171ULL, 341ULL, 683ULL, 1365ULL, 2731ULL, 5461ULL, 10923ULL, 21845ULL, 43691ULL, 87381ULL, 174763ULL, 349525ULL, 699051ULL, 1398101ULL, 2796203ULL, 5592405ULL, 11184811ULL, 22369621ULL, 44739243ULL, 89478485ULL, 178956971ULL, 357913941ULL, 715827883ULL, 1431655765ULL, 2863311531ULL, 5726623061ULL, 11453246123ULL}
+const static unsigned long long	g_k[34] = {1ULL, 3ULL,  9ULL, 19ULL, 41ULL, 83ULL, 169ULL, 339ULL, 681ULL, 1363ULL, 2729ULL, 5459ULL, 10921ULL, 21843ULL, 43689ULL, 87379ULL, 174761ULL, 349523ULL, 699049ULL, 1398099ULL, 2796201ULL, 5592403ULL, 11184809ULL, 22369619ULL, 44739241ULL, 89478483ULL, 178956969ULL, 357913939ULL, 715827881ULL, 1431655763ULL, 2863311529ULL, 5726623059ULL, 11453246121ULL};
+
+static void ok_insertSort(std::vector<unsigned int> &mainChain, std::vector<unsigned int> &pendChain)
+{
+	unsigned long long	insertions = 2; 
+	unsigned long long	size = pendChain.size();
+	unsigned long long	index = 0;
+	unsigned long long	gindex = 0;
+	if (1 < size)
+	{
+		index = 1;
+		
+		mainChain.insert(std::lower_bound(mainChain.begin(), mainChain.begin() + 3, pendChain[1]), pendChain[1]);
+	}
+	if (0 < size)
+	{
+		index = 0;
+		mainChain.insert(std::lower_bound(mainChain.begin(), mainChain.begin() + 3, pendChain[0]), pendChain[0]);
+	}
+	index = g_k[gindex + 1];
+	while (insertions < size)
+	{
+		std::cout << "Size " << size << " | index " << index << " | insertions " << insertions << std::endl;
+		if (index < size)
+		{
+			std::cout << "Inserting: " << pendChain[index]
+			<< " between " << *(mainChain.begin())
+			<< " and " << *(std::lower_bound(mainChain.begin(), mainChain.begin() + std::min((unsigned long long)mainChain.size(), (unsigned long long)std::pow(gindex + 3, 2) - 1), pendChain[index]))
+			<< std::endl;
+			ok_iterPrint(mainChain, "Main chain A  ");
+			mainChain.insert(std::lower_bound(mainChain.begin(), mainChain.begin() + std::min((unsigned long long)mainChain.size(), (unsigned long long)std::pow(gindex + 3, 2) - 1), pendChain[index]), pendChain[index]);
+			ok_iterPrint(mainChain, "Main chain B  ");
+			insertions++;
+		}
+		index--;
+		if(index == g_k[gindex])
+		{
+			gindex++;
+			index = g_k[gindex + 1];
+		}
+	}
 }
 
 static std::vector<unsigned int>	ok_sort(std::vector<unsigned int> oldVector)
@@ -281,6 +338,7 @@ static std::vector<unsigned int>	ok_sort(std::vector<unsigned int> oldVector)
 	//main chain
 	//pend chain
 	unsigned int	size = oldVector.size();
+	unsigned int	leftover;
 	bool			odd = false;
 	(void) odd;
 	if (size / 2)
@@ -295,9 +353,29 @@ static std::vector<unsigned int>	ok_sort(std::vector<unsigned int> oldVector)
 		(a > b) ? pair = std::make_pair(a, b) : pair = std::make_pair(b, a);
 		pairVector.push_back(pair);
 	}
+	if (odd)
+		leftover = *it;
 	ok_mergeSort(pairVector, 0, pairVector.size() - 1);
 	std::vector<unsigned int> mainChain;
+	std::vector<unsigned int> pendChain;
+	std::vector<std::pair<unsigned int, unsigned int> >::iterator iter = pairVector.begin();
+	if (iter != pairVector.end())
+	{
+		mainChain.push_back(iter->second);
+		mainChain.push_back(iter->first);
+		iter++;
+	}
+	for (; iter != pairVector.end(); iter++)
+	{
+		mainChain.push_back(iter->first);
+		pendChain.push_back(iter->second);
+	}
+	if (odd)
+		pendChain.push_back(leftover);
 	ok_iterPrint(pairVector, "Pair vector   ");
+	ok_iterPrint(mainChain, "Main chain    ");
+	ok_iterPrint(pendChain, "Pend chain    ");
+	ok_insertSort(mainChain, pendChain);
 	return(mainChain);
 }
 

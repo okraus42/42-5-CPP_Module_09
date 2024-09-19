@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/09/16 14:05:29 by okraus           ###   ########.fr       */
+/*   Updated: 2024/09/19 18:16:56 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <fstream>
 # include <sstream>
 # include <ctime>
+# include <cmath>
 # include <cstring>
 # include <list>
 # include <vector>
