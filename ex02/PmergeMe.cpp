@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 13:08:58 by okraus            #+#    #+#             */
-/*   Updated: 2024/09/19 19:43:36 by okraus           ###   ########.fr       */
+/*   Updated: 2024/09/21 15:36:10 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -554,11 +554,11 @@ PmergeMe::PmergeMe(char *argv[])
 	//time sort in each container
 	//print containers
 	std::cout << "Time to process a range of " << this->lst.size()
-	<< " elements with std::list   : " << std::fixed << std::setprecision (5) << durationLst
+	<< " elements with std::list   : " << std::fixed << std::setprecision (1) << durationLst
 	<< " μs" << std::endl;
 	
 	std::cout << "Time to process a range of " << this->vec.size()
-	<< " elements with std::vector : " << std::fixed << std::setprecision (5) << durationVec
+	<< " elements with std::vector : " << std::fixed << std::setprecision (1) << durationVec
 	<< " μs" << std::endl;
 }
 
